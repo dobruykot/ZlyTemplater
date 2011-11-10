@@ -1,0 +1,22 @@
+<?php echo $this->doctype() ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php echo $this->headTitle() ?>
+    <style>
+        a {
+            color: white;
+        }
+    </style>
+</head>
+<body style="background: #373E46; color: white;">
+<div style=" height: 70px; line-height: 80px; padding-left: 20px; font-size: 120%;"><img src="http://zendmania.com/themes/zendmania/images/logo.png" /></div>
+<div style="background: #F7A922; height: 50px; border: 1px solid #F65D20; color: #373E46; line-height: 50px; padding-left: 30px; font-size: 120%;">
+    <span style="color:red;">Warning:</span> Used default layout. For switch it go to 'Templater' module administrator panel.
+</div>
+<div style="padding: 10px;">
+<?php echo $this->raw('content'); ?>
+</div>
+</body>
+</html>

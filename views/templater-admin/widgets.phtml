@@ -1,0 +1,30 @@
+<table class="admin-table">
+    <tr>
+        <th width="20">ID</th>
+        <th>Widget Name</th>
+        <th>Position</th>
+        <th>Layout</th>
+        <th width="150">Theme</th>
+        <th width="10">Published</th>
+        <th width="10">Order</th>
+        <th width="10">Actions</th>
+    </tr>
+    <?php foreach ($this->widgets as $item) { ?>
+        <tr>
+            <td align="center"><?php echo $item->getId(); ?></td>
+            <td>
+                    <a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-widget', 'id' => $item->getId())); ?>"><?php echo $item->getName();?></a>
+            </td>
+            <td align="center"><?php echo $item->getPlaceholder(); ?></td>
+            <td align="center"><?php echo $item->getLayout()->getTitle(); ?></td>
+            <td align="center"><?php echo $item->getLayout()->getTheme()->getTitle(); ?></td>
+            <td align="center"><a href="<?php echo $this->url('default', array('action' => 'publish-widget', 'module' => 'templater', 'id' => $item->getId())); ?>" class="icon16 <?php if($item->getPublished()) echo 'icon-published'; else echo 'icon-not-published'?>"></a></td>
+            <td align="center"><?php echo $item->getOrdering(); ?></td>
+            <td align="center" nowrap="nowrap">
+                
+                <a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-widget', 'id' => $item->getId()));?>">Edit</a>
+                <a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'delete-widget', 'id' => $item->getId()));?>">Delete</a>
+        </td>
+    </tr>
+<?php } ?>
+</table>

@@ -1,0 +1,37 @@
+<table class="admin-table">
+    <tr>
+        <th width="20">ID</th>
+        <th>Title</th>
+        <th width="150">System name</th>
+        <th width="200">Theme name</th>
+        <th width="20">Published</th>
+        <th width="10">Actions</th>
+    </tr>
+    <?php foreach ($this->layouts as $item) {
+ ?>
+        <tr>
+            <td align="center"><?php echo $item->getId(); ?></td>
+            <td>
+                <a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-layout', 'id' => $item->getId())); ?>"><?php echo $item->getTitle();?></a>
+            </td>
+            <td align="center"><?php echo $item->getName(); ?></td>
+            <td align="center"><?php echo $item->getTheme()->getTitle(); ?></td>
+            <td align="center"><a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'publish-layout',  'id' => $item->getId())); ?>" class="icon16 
+            <?php if ($item->getPublished())
+                    echo 'icon-published'; 
+                  else
+                    echo 'icon-not-published' ?>"></a></td>
+        <td align="center" nowrap="nowrap">
+            <a class="icon-layout_content" href="
+                      <?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'widgets', 'layid' => $item->getId()));?>">
+            Widgets</a>
+            <a class="edit-item" href="
+                      <?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-layout', 'id' => $item->getId()));?>">
+            Edit</a>
+            <a class="delete-item" href="
+                      <?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'delete-layout', 'id' => $item->getId()));?>">
+            Delete</a>
+        </td>
+    </tr>
+<?php } ?>
+</table>

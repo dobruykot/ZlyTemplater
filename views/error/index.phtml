@@ -1,0 +1,15 @@
+<h2><?php echo $this->message ?></h2>
+
+<?php if (isset($this->exception) && $this->display_exceptions): ?>
+
+<h3>Exception information:</h3>
+<p>
+    <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+</p>
+<p>
+    <b>File:</b> <?php echo $this->exception->getFile(); ?>:<?php echo $this->exception->getLine(); ?>
+</p>
+<p>
+    <b>Trace:</b><pre><?php print_r($this->exception->getTraceAsString()); ?></pre>
+</p>
+<?php endif ?>

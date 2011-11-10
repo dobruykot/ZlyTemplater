@@ -1,0 +1,29 @@
+<table class="admin-table">
+    <tr>
+        <th width="20">ID</th>
+        <th>Title</th>
+        <th width="150">Drirectory name</th>
+        <th width="10">Current</th>
+        <th width="10">Actions</th>
+    </tr>
+    <?php foreach ($this->themes as $item) {
+ ?>
+        <tr>
+            <td align="center"><?php echo $item->getId(); ?></td>
+            <td ><a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-theme', 'id' => $item->getId())); ?>"><?php echo $item->getTitle(); ?></a></td>
+            <td align="center"><?php echo $item->getName(); ?></td>
+            <td align="center"><a href="<?php echo $this->url('default',array('controller'=>'templater-admin', 'action' => 'current-theme', 'id' => $item->getId())); ?>" class="icon16 
+            <?php if ($item->getCurrent())
+            echo 'icon-published'; else
+            echo 'icon-not-published' ?>"></a></td>
+            <td align="center" nowrap="nowrap">
+                <a class="icon-xhtml" 
+                   href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'layouts', 'tpl' => $item->getId())); ?>">Layouts</a>
+                <a class="edit-item" 
+                   href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-theme', 'id' => $item->getId())); ?>">Edit</a>
+                <a class="delete-item" 
+                   href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'delete-theme', 'id' => $item->getId())); ?>">Delete</a>
+        </td>
+    </tr>
+<?php } ?>
+</table>
