@@ -9,36 +9,36 @@
 namespace Templater\Model\Mapper;
 
 /**
- * @Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Widget")
- * @Doctrine\ORM\Mapping\Table(name="templater_widgets")
+ * @\Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Widget")
+ * @\Doctrine\ORM\Mapping\Table(name="templater_widgets")
  */
 class Widget
 {
     /**
-     * @Doctrine\ORM\Mapping\Id 
-     * @Doctrine\ORM\Mapping\Column(type="integer")
-     * @Doctrine\ORM\Mapping\GeneratedValue
+     * @\Doctrine\ORM\Mapping\Id
+     * @\Doctrine\ORM\Mapping\Column(type="integer")
+     * @\Doctrine\ORM\Mapping\GeneratedValue
      */
     protected $id;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $name;
-    /** @Doctrine\ORM\Mapping\Column(type="boolean") */
+    /** @\Doctrine\ORM\Mapping\Column(type="boolean") */
     protected $published;
-    /** @Doctrine\ORM\Mapping\Column(type="integer", nullable=true) */
+    /** @\Doctrine\ORM\Mapping\Column(type="integer", nullable=true) */
     protected $layout_id;    
-    /** @Doctrine\ORM\Mapping\Column(type="integer", nullable=true) */
+    /** @\Doctrine\ORM\Mapping\Column(type="integer", nullable=true) */
     protected $ordering;  
-    /** @Doctrine\ORM\Mapping\Column(length=35) */
+    /** @\Doctrine\ORM\Mapping\Column(length=35) */
     protected $map_id;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $placeholder;
     /**
-     * @Doctrine\ORM\Mapping\ManyToOne(targetEntity="Templater\Model\Mapper\Layout")
-     * @Doctrine\ORM\Mapping\JoinColumn(name="layout_id", referencedColumnName="id", unique=false)
+     * @\Doctrine\ORM\Mapping\ManyToOne(targetEntity="Templater\Model\Mapper\Layout")
+     * @\Doctrine\ORM\Mapping\JoinColumn(name="layout_id", referencedColumnName="id", unique=false)
      */
     protected $layout;
     /**
-     * @Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\WidgetPoint", mappedBy="widget", cascade={"remove", "persist"})
+     * @\Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\WidgetPoint", mappedBy="widget", cascade={"remove", "persist"})
      */
     protected $points; 
     

@@ -9,25 +9,25 @@
 namespace Templater\Model\Mapper;
 
 /**
- * @Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Theme")
- * @Doctrine\ORM\Mapping\Table(name="templater_themes")
+ * @\Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Theme")
+ * @\Doctrine\ORM\Mapping\Table(name="templater_themes")
  */
 class Theme
 {
     /**
-     * @Doctrine\ORM\Mapping\Id 
-     * @Doctrine\ORM\Mapping\Column(type="integer")
-     * @Doctrine\ORM\Mapping\GeneratedValue
+     * @\Doctrine\ORM\Mapping\Id
+     * @\Doctrine\ORM\Mapping\Column(type="integer")
+     * @\Doctrine\ORM\Mapping\GeneratedValue
      */
     protected $id;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $title;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $name;
-    /** @Doctrine\ORM\Mapping\Column(type="boolean") */
+    /** @\Doctrine\ORM\Mapping\Column(type="boolean") */
     protected $current;    
     /**
-     * @Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\Layout", mappedBy="theme", cascade={"remove"})
+     * @\Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\Layout", mappedBy="theme", cascade={"remove"})
      */
     protected $layouts;
     

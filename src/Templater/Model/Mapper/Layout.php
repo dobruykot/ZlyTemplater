@@ -11,38 +11,38 @@
 namespace Templater\Model\Mapper;
 
 /**
- * @Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Layout")
- * @Doctrine\ORM\Mapping\Table(name="templater_layouts")
+ * @\Doctrine\ORM\Mapping\Entity(repositoryClass="Templater\Model\DbTable\Layout")
+ * @\Doctrine\ORM\Mapping\Table(name="templater_layouts")
  */
 class Layout
 {
     /**
-     * @Doctrine\ORM\Mapping\Id 
-     * @Doctrine\ORM\Mapping\Column(type="integer")
-     * @Doctrine\ORM\Mapping\GeneratedValue
+     * @\Doctrine\ORM\Mapping\Id
+     * @\Doctrine\ORM\Mapping\Column(type="integer")
+     * @\Doctrine\ORM\Mapping\GeneratedValue
      */
     protected $id;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $title;
-    /** @Doctrine\ORM\Mapping\Column(length=255) */
+    /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $name;
-    /** @Doctrine\ORM\Mapping\Column(type="integer") */
+    /** @\Doctrine\ORM\Mapping\Column(type="integer") */
     protected $theme_id;
-    /** @Doctrine\ORM\Mapping\Column(length=1000, nullable=true) */
+    /** @\Doctrine\ORM\Mapping\Column(length=1000, nullable=true) */
     protected $params;
-    /** @Doctrine\ORM\Mapping\Column(type="boolean") */
+    /** @\Doctrine\ORM\Mapping\Column(type="boolean") */
     protected $published;
     /**
-     * @Doctrine\ORM\Mapping\ManyToOne(targetEntity="Templater\Model\Mapper\Theme")
-     * @Doctrine\ORM\Mapping\JoinColumn(name="theme_id", referencedColumnName="id", unique=false)
+     * @\Doctrine\ORM\Mapping\ManyToOne(targetEntity="Templater\Model\Mapper\Theme")
+     * @\Doctrine\ORM\Mapping\JoinColumn(name="theme_id", referencedColumnName="id", unique=false)
      */
     protected $theme;
     /**
-     * @Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\Widget", mappedBy="layout", cascade={"remove", "persist"})
+     * @\Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\Widget", mappedBy="layout", cascade={"remove", "persist"})
      */
     protected $widgets;    
     /**
-     * @Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\LayoutPoint", mappedBy="layout", cascade={"remove", "persist"})
+     * @\Doctrine\ORM\Mapping\OneToMany(targetEntity="Templater\Model\Mapper\LayoutPoint", mappedBy="layout", cascade={"remove", "persist"})
      */
     protected $points;
 

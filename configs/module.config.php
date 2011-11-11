@@ -22,7 +22,7 @@ return array(
             )
         )
     ),
-    'doctrine' => array(
+    'db' => array(
         'entitiesPaths' => array(
             'templater'=>__DIR__ . '/../src/Templater/Model/Mapper',
         )
