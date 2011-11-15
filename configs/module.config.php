@@ -34,8 +34,8 @@ return array(
         'instance' => array(
             'alias' => array(
                 'view'  => 'Zend\View\PhpRenderer',
-                'templater-tools'   => 'Templater\Controller\ToolsController',
-                'templater-admin'   => 'Templater\Controller\AdminController',
+                'templater-tools'   => 'ZlyTemplater\Controller\ToolsController',
+                'templater-admin'   => 'ZlyTemplater\Controller\AdminController',
             ),
             'Zend\View\HelperBroker' => array(
                 'parameters' => array(
@@ -54,32 +54,32 @@ return array(
                     'broker' => 'Zend\View\HelperBroker',
                 ),
             ),
-            'Templater\Model\Layouts' => array(
+            'ZlyTemplater\Model\Layouts' => array(
                 
             ),
-            'Templater\Model\Themes' => array(
+            'ZlyTemplater\Model\Themes' => array(
 
             ),
-            'Templater\Form\Theme' => array(
+            'ZlyTemplater\Form\Theme' => array(
                 'parameters' => array(
-                    'model' => 'Templater\Model\Themes',
+                    'model' => 'ZlyTemplater\Model\Themes',
                     'view' => 'view'
                 )
             ),
-            'Templater\Form\Layout' => array(
+            'ZlyTemplater\Form\Layout' => array(
                 'parameters' => array(
-                    'model' => 'Templater\Model\Themes',
+                    'model' => 'ZlyTemplater\Model\Themes',
                     'view' => 'view'
                 )
             ),
-            'Templater\Form\Widget' => array(
+            'ZlyTemplater\Form\Widget' => array(
                 'parameters' => array(
                     'view' => 'view'
                 )
             ),
-            'Templater\View\Listener' => array(
+            'ZlyTemplater\View\Listener' => array(
                 'parameters' => array(
-                    'model' => 'Templater\Model\Layouts',
+                    'model' => 'ZlyTemplater\Model\Layouts',
                     'view' => 'view'
                 )
             )

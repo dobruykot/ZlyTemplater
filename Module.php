@@ -7,7 +7,7 @@
  * @author Evgheni Poleacov <evgheni.poleacov@gmail.com>
  */
 
-namespace Templater;
+namespace ZlyTemplater;
 
 use Zend\Config\Config,
     Zend\Module\Manager,
@@ -47,7 +47,7 @@ class Module
     {
         $app          = $e->getParam('application');
         $locator      = $app->getLocator();
-        $config       = $e->getParam('modules')->getMergedConfig();
+        $config       = $e->getParam('config');
 
         $this->initView($app);
         $viewListener = $this->getViewListener($config->templater, $locator);
@@ -61,8 +61,8 @@ class Module
     protected function initModels(\Zend\EventManager\Event $e)
     {
         $locator = $e->getParam('application')->getLocator();
-        $config = $e->getParam('modules')->getMergedConfig();
-        $themeModel = $locator->get('Templater\Model\Themes');
+        $config = $e->getParam('config');
+        $themeModel = $locator->get('ZlyTemplater\Model\Themes');
         $themeModel->setConfig($config->templater);
         $themeModel->setLocator($locator);     
     }
@@ -73,7 +73,7 @@ class Module
             return $this->viewListener;
         }
        
-        $viewListener = $locator->get('Templater\View\Listener');
+        $viewListener = $locator->get('ZlyTemplater\View\Listener');
         $viewListener->setConfig($config);
         $this->viewListener = $viewListener;
         return $viewListener;
