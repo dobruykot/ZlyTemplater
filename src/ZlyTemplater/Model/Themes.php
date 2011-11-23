@@ -13,6 +13,17 @@ class Themes extends \Zly\Doctrine\Model
     protected $config;
     protected $locator;
     
+    /**
+     *
+     * @var \Doctrine\ORM\EntityManager 
+     */
+    protected $em;
+    
+    public function __construct(\Doctrine\ORM\EntityManager $em)
+    {
+        $this->em = $em;
+    }
+    
     public function setLocator($locator)
     {
         $this->locator = $locator;
@@ -29,7 +40,7 @@ class Themes extends \Zly\Doctrine\Model
      */
     public function getlist()
     {
-        return $this->getEntityManager()
+        return $this->em
                     ->getRepository('ZlyTemplater\Model\Mapper\Theme')
                     ->findAll();
     }
@@ -42,7 +53,7 @@ class Themes extends \Zly\Doctrine\Model
      */
     public function getThemesPaginator($pageNumber = 1, $itemCountPerPage = 20)
     {
-        $repo = $this->getEntityManager()->getRepository('ZlyTemplater\Model\Mapper\Theme');
+        $repo = $this->em->getRepository('ZlyTemplater\Model\Mapper\Theme');
         $paginator = new \Zend\Paginator\Paginator($repo->getPaginatorAdapter());
         $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
         return $paginator;
@@ -57,7 +68,7 @@ class Themes extends \Zly\Doctrine\Model
     public function getTheme($id = null, $forUpdate = false)
     {
         if (!empty($id))
-            $theme = $this->getEntityManager()
+            $theme = $this->em
                           ->getRepository('\ZlyTemplater\Model\Mapper\Theme')
                           ->findOneBy(array('id'=>$id));
         else
@@ -75,14 +86,14 @@ class Themes extends \Zly\Doctrine\Model
      */
     public function disableAllThemes()
     {
-        $activeThemes = $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\Theme')
+        $activeThemes = $this->em->getRepository('\ZlyTemplater\Model\Mapper\Theme')
                 ->findBy(array('current'=>true));
 
         foreach ($activeThemes as $theme) {
             $theme->setCurrent(false);
-            $this->getEntityManager()->persist($theme);
+            $this->em->persist($theme);
         }
-        $this->getEntityManager()->flush();
+        $this->em->flush();
         return true;
     }
 
@@ -101,8 +112,8 @@ class Themes extends \Zly\Doctrine\Model
             $current = true;
             $theme->setCurrent(false);
         }
-        $this->getEntityManager()->persist($theme);
-        $result = $this->getEntityManager()->flush();
+        $this->em->persist($theme);
+        $result = $this->em->flush();
 
         if (!empty($values['import_layouts'])) {
             $layoutsModel->importFromTheme($theme, true);
@@ -124,8 +135,8 @@ class Themes extends \Zly\Doctrine\Model
             if($front) {
                 $this->disableAllThemes();
                 $theme->setCurrent(true);
-                $this->getEntityManager()->persist($theme);
-                $result = $this->getEntityManager()->flush();
+                $this->em->persist($theme);
+                $result = $this->em->flush();
             } else {
                 throw new \Zend\Layout\Exception('Theme can\'t be activated, because '.
                         'published default layouts not found for this theme');
@@ -158,19 +169,19 @@ class Themes extends \Zly\Doctrine\Model
      */
     public function deleteTheme($id)
     {
-        $theme = $this->getEntityManager()
+        $theme = $this->em
                       ->getRepository('\ZlyTemplater\Model\Mapper\Theme')->find($id);
         if(empty($theme))
             return false;
         if($theme->getCurrent() == true)
             throw new Zend_Exception('You can\'t delete active theme.');
-        $this->getEntityManager()->remove($theme);
-        return $this->getEntityManager()->flush();
+        $this->em->remove($theme);
+        return $this->em->flush();
     }
     
     public function initSchema()
     {
-        $em = $this->getEntityManager();
+        $em = $this->em;
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
         $classes = $this->_getShemaClasses();
         $tool->dropSchema($classes);    
@@ -180,7 +191,7 @@ class Themes extends \Zly\Doctrine\Model
     
     public function updateSchema()
     {
-        $em = $this->getEntityManager();
+        $em = $this->em;
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
         $classes = $this->_getShemaClasses();
         $tool->updateSchema($classes, true);
@@ -189,7 +200,7 @@ class Themes extends \Zly\Doctrine\Model
     
     public function dropSchema()
     {
-        $em = $this->getEntityManager();
+        $em = $this->em;
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
         $classes = $this->_getShemaClasses();
         $tool->dropSchema($classes);
@@ -198,7 +209,7 @@ class Themes extends \Zly\Doctrine\Model
     
     protected function _getShemaClasses()
     {
-        $em = $this->getEntityManager();
+        $em = $this->em;
         $classes = array(
           $em->getClassMetadata('ZlyTemplater\Model\Mapper\Layout'),
           $em->getClassMetadata('ZlyTemplater\Model\Mapper\LayoutPoint'),

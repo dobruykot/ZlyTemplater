@@ -15,10 +15,16 @@ class Widgets extends \Zly\Doctrine\Model
      * @var \ZlyTemplater\Model\DbTable\Widget
      */
     protected $_repository;
+    /**
+     *
+     * @var \Doctrine\ORM\EntityManager 
+     */
+    protected $em;
     
-    public function __construct()
+    public function __construct(\Doctrine\ORM\EntityManager $em)
     {
-        $this->_repository = $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\Widget');
+        $this->em = $em;
+        $this->_repository = $this->em->getRepository('\ZlyTemplater\Model\Mapper\Widget');
     }
     
     /**
@@ -61,32 +67,32 @@ class Widgets extends \Zly\Doctrine\Model
         $widget->fromArray($values);     
 
         if($widget->getId()) {
-            $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\WidgetPoint')
+            $this->em->getRepository('\ZlyTemplater\Model\Mapper\WidgetPoint')
                 ->deleteUnusedPoints($widget->getId(), $values['widget_points']);
         }
-        $layout = $this->getEntityManager()
+        $layout = $this->em
                        ->getRepository('\ZlyTemplater\Model\Mapper\Layout')
                        ->find($widget->getLayoutId());
         $widget->setLayout($layout);
-        $this->getEntityManager()->persist($widget);
+        $this->em->persist($widget);
 
         if(!empty($values['widget_points'])) {
             foreach($values['widget_points'] as $key=>$mapId) {
                 
                 if($widget->getId())
-                    $point = $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\WidgetPoint')
+                    $point = $this->em->getRepository('\ZlyTemplater\Model\Mapper\WidgetPoint')
                             ->findOneBy(array('map_id' => $mapId, 'widget_id'=>$widget->getId()));
 
                 if(empty($point)) {
                     $point = new Mapper\WidgetPoint();
                     $point->setMapId($mapId);
                     $point->setWidget($widget);
-                    $this->getEntityManager()->persist($point);
+                    $this->em->persist($point);
                 }
             }
         }
         
-        return $this->getEntityManager()->flush();
+        return $this->em->flush();
     }
 
     /**
@@ -97,7 +103,7 @@ class Widgets extends \Zly\Doctrine\Model
      */
     public function getWidgetsPaginator($pageNumber = 1, $itemCountPerPage = 20)
     {
-        $repo = $this->getEntityManager()->getRepository('ZlyTemplater\Model\Mapper\Widget');
+        $repo = $this->em->getRepository('ZlyTemplater\Model\Mapper\Widget');
         $paginator = new \Zend\Paginator\Paginator($repo->getPaginatorAdapter());
         $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
         return $paginator;

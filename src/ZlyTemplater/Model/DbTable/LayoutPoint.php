@@ -34,8 +34,8 @@ class LayoutPoint extends EntityRepository
 
         $points = $query->execute();
         foreach($points as $point)
-            $this->getEntityManager()->remove($point);
-        return $this->getEntityManager()->flush();
+            $this->em->remove($point);
+        return $this->em->flush();
     }
 }
 

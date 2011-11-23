@@ -55,10 +55,14 @@ return array(
                 ),
             ),
             'ZlyTemplater\Model\Layouts' => array(
-                
+                'parameters' => array(
+                    'em' => 'readwrite'
+                )
             ),
             'ZlyTemplater\Model\Themes' => array(
-
+                'parameters' => array(
+                    'em' => 'readwrite'
+                )
             ),
             'ZlyTemplater\Form\Theme' => array(
                 'parameters' => array(

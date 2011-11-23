@@ -11,14 +11,23 @@ class Layouts extends \Zly\Doctrine\Model
 {
 
     protected $repoName = '\ZlyTemplater\Model\Mapper\Layout';
+    /**
+     *
+     * @var \Doctrine\ORM\EntityManager 
+     */
+    protected $em;
     
+    public function __construct(\Doctrine\ORM\EntityManager $em)
+    {
+        $this->em = $em;
+    }
     /**
      * Return all layouts collection
      * @return Doctrine_Collection
      */
     public function getlist()
     {
-        return $this->getEntityManager()->getRepository($this->repoName)->findAll();
+        return $this->em->getRepository($this->repoName)->findAll();
     }
 
     /**
@@ -31,7 +40,7 @@ class Layouts extends \Zly\Doctrine\Model
         if(empty($id))
             return new Mapper\Layout();
 
-        $layout = $this->getEntityManager()->getRepository($this->repoName)->getLayoutWithLayoutPoints($id);
+        $layout = $this->em->getRepository($this->repoName)->getLayoutWithLayoutPoints($id);
 
         if(empty($layout))
             return new Mapper\Layout();
@@ -45,7 +54,7 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function getDefaultLayout()
     {
-        return $this->getEntityManager()->getRepository($this->repoName)
+        return $this->em->getRepository($this->repoName)
                     ->getDefaultLayout();
     }
     
@@ -55,7 +64,7 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function getCurrentLayout($identifiers)
     {
-        return $this->getEntityManager()->getRepository($this->repoName)
+        return $this->em->getRepository($this->repoName)
                     ->getCurrentLayout($identifiers);
     }
 
@@ -68,7 +77,7 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function getLayoutsPaginator($pageNumber = 1, $itemCountPerPage = 20, array $where = array())
     {
-        $paginator = new \Zend\Paginator\Paginator($this->getEntityManager()->getRepository($this->repoName)->getPaginatorAdapter());
+        $paginator = new \Zend\Paginator\Paginator($this->em->getRepository($this->repoName)->getPaginatorAdapter());
         $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
         return $paginator;
     }
@@ -101,7 +110,7 @@ class Layouts extends \Zly\Doctrine\Model
             
         if($import)
             foreach (array_keys($layouts) as $name) {
-                $exist = $this->getEntityManager()->getRepository($this->repoName)
+                $exist = $this->em->getRepository($this->repoName)
                         ->findOneBy(array('theme_id'=>$theme->getId(), 'name'=>$name));
                
                 if (empty($exist)) {
@@ -110,19 +119,19 @@ class Layouts extends \Zly\Doctrine\Model
                     $layout->setTheme($theme);
                     $layout->setTitle(ucfirst($name));
                     $layout->setPublished(true);
-                    $this->getEntityManager()->persist($layout);
+                    $this->em->persist($layout);
                     
                     if ($name == $options['layout']['default']) {
 
                         $layPoint = new Mapper\LayoutPoint();
                         $layPoint->setMapId($rootNode->getResourceId());
                         $layPoint->setLayout($layout);
-                        $this->getEntityManager()->persist($layPoint);
+                        $this->em->persist($layPoint);
                     }
                 }
             }
         
-        $this->getEntityManager()->flush();
+        $this->em->flush();
         return $layouts;
     }
 
@@ -157,32 +166,32 @@ class Layouts extends \Zly\Doctrine\Model
         $id = $layout->getId();
         
         if(!empty($id)) {
-            $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\LayoutPoint')
+            $this->em->getRepository('\ZlyTemplater\Model\Mapper\LayoutPoint')
                 ->deleteUnusedPoints($layout->getId(), $values['map_id']);
         } else {
-            $theme = $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\Theme')
+            $theme = $this->em->getRepository('\ZlyTemplater\Model\Mapper\Theme')
                           ->find($values['theme_id']);
             $layout->setTheme($theme);
         }
         
-        $this->getEntityManager()->persist($layout);
+        $this->em->persist($layout);
         
         if(!empty($values['map_id'])) {
             foreach($values['map_id'] as $key=>$mapId) {
-                $repo = $this->getEntityManager()->getRepository('\ZlyTemplater\Model\Mapper\LayoutPoint');
+                $repo = $this->em->getRepository('\ZlyTemplater\Model\Mapper\LayoutPoint');
                 $layPoint = $repo->findOneBy(array('map_id'=>$mapId, 'layout_id'=>$layout->getId()));
                 
                 if(empty($layPoint)) {
                     $layPoint = new Mapper\LayoutPoint();
                     $layPoint->setMapId($mapId);
                     $layPoint->setLayout($layout);
-                    $this->getEntityManager()->persist($layPoint);
+                    $this->em->persist($layPoint);
                 } 
             }
 
         }
 
-        return $this->getEntityManager()->flush();
+        return $this->em->flush();
     }
 
     /**
@@ -192,16 +201,16 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function deleteLayout(Mapper\Layout $layout, \Zend\Controller\Request\AbstractRequest $request)
     {
-        $currentLayout = $this->getEntityManager()->getRepository($this->repoName)
+        $currentLayout = $this->em->getRepository($this->repoName)
                 ->getCurrentLayout($request);
         if($currentLayout->getId() == $layout->getId())
             throw new \Zend\Layout\Exception('You can\'t delete current layout');
-        $this->getEntityManager()->remove($layout);
-        return $this->getEntityManager()->flush();
+        $this->em->remove($layout);
+        return $this->em->flush();
     }
 
     public function getLayoutWithWidgetsbyNameAndRequest($layoutName, $mapIds = array()) 
     {
-        return $this->getEntityManager()->getRepository($this->repoName)->getLayoutWithWidgetsbyNameAndRequest($layoutName, $mapIds);
+        return $this->em->getRepository($this->repoName)->getLayoutWithWidgetsbyNameAndRequest($layoutName, $mapIds);
     }
 }
