@@ -24,7 +24,7 @@ class Module
     {
         $this->initAutoloader();
         $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'initializeView'), 100);
+        $events->attach('bootstrap', 'bootstrap', array($this, 'initializeView'));
     }
 
     public function initAutoloader()
