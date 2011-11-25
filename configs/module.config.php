@@ -54,6 +54,11 @@ return array(
                     'broker' => 'Zend\View\HelperBroker',
                 ),
             ),
+            'ZlyTemplater\Model\Widgets' => array(
+                'parameters' => array(
+                    'em' => 'readwrite'
+                )
+            ),
             'ZlyTemplater\Model\Layouts' => array(
                 'parameters' => array(
                     'em' => 'readwrite'

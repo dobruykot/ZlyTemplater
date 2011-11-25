@@ -36,7 +36,7 @@ class AdminController extends ActionController
      */
     public function themesAction()
     {
-        $themesModel = new Model\Themes();
+        $themesModel = $this->getLocator()->get('ZlyTemplater\Model\Themes');
         return array('themes' => $themesModel->getThemesPaginator(
             $this->getRequest()->getMetadata('page', 1),
             $this->getRequest()->getMetadata('perPage', 20)
@@ -75,7 +75,7 @@ class AdminController extends ActionController
      */
     public function deleteThemeAction()
     {
-        $model = new Model\Themes();
+        $model = $this->getLocator()->get('ZlyTemplater\Model\Themes');
         try {
             $result = $model->deleteTheme($this->getRequest()->getMetadata('id'));
             if ($result)
@@ -96,7 +96,7 @@ class AdminController extends ActionController
     public function layoutsAction()
     {
         $tplId = $this->getRequest()->getMetadata('tpl', null);
-        $layoutsModel = new Model\Layouts();
+        $layoutsModel = $this->getLocator()->get('ZlyTemplater\Model\Layouts');
         $where = array();
         if (!empty($tplId))
             $where['theme_id'] = $tplId;
@@ -113,7 +113,7 @@ class AdminController extends ActionController
      */
     public function editLayoutAction()
     {
-        $layoutModel = new Model\Layouts();
+        $layoutModel = $this->getLocator()->get('ZlyTemplater\Model\Layouts');
         $layout = $layoutModel->getLayout($this->getRequest()->getMetadata('id'), true);
         $form = $this->getLocator()->get('ZlyTemplater\Form\Layout', array('options'=>array('locator'=>$this->getLocator())));
         $form->populate($layout->toArray());
@@ -131,7 +131,7 @@ class AdminController extends ActionController
      */
     public function deleteLayoutAction()
     {
-        $model = new Mode\Layouts();
+        $model = $this->getLocator()->get('ZlyTemplater\Model\Layouts');
         try{
             $result = $model->deleteLayout($this->getRequest()->getParam('id'), $this->getRequest());
             if ($result)
@@ -153,7 +153,7 @@ class AdminController extends ActionController
      */
     public function widgetsAction()
     {
-        $widgetsModel = new Model\Widgets();
+        $widgetsModel = $this->getLocator()->get('ZlyTemplater\Model\Widgets');
         return array('widgets' => $widgetsModel->getWidgetsPaginator(
             $this->getRequest()->getMetadata('page', 1),
             $this->getRequest()->getMetadata('perPage', 20)
@@ -166,7 +166,7 @@ class AdminController extends ActionController
      */
     public function editWidgetAction()
     {
-        $widgetsModel = new Model\Widgets();
+        $widgetsModel = $this->getLocator()->get('ZlyTemplater\Model\Widgets');
         $themesMmodel =$this->getLocator()->get('ZlyTemplater\Model\Themes');
         $form = $this->getLocator()->get('ZlyTemplater\Form\Widget', array('options'=>array('model'=>$themesMmodel, 'locator'=>$this->getLocator())));
         $widget = $widgetsModel->getWidget($this->getRequest()->getMetadata('id'), true);
@@ -185,7 +185,7 @@ class AdminController extends ActionController
      */
     public function deleteWidgetAction()
     {
-        $widgetsModel = new Model\Widgets();
+        $widgetsModel = $this->getLocator()->get('ZlyTemplater\Model\Widgets');
         $result = $widgetsModel->deleteWidget($this->getRequest()->getMetadata('id'));
         if($result)
             $this->flashMessenger(array())->addMessage('Widget successful saved.');
