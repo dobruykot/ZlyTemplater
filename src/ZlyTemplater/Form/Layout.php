@@ -15,6 +15,11 @@ class Layout extends \Zend\Form\Form
     protected $locator;
     
     /**
+     * @var \ZlyTemplater\Model\Themes
+     */
+    protected $themesModel;
+    
+    /**
      * Form initialization
      */
     public function init()
@@ -28,9 +33,7 @@ class Layout extends \Zend\Form\Form
                 ->setRequired(true);
         $this->addElement($element);
 
-        $themeModel = new \ZlyTemplater\Model\Themes();
-        $themes = $themeModel->getThemesPaginator(1, 10000);
-
+        $themes = $this->themesModel->getThemesPaginator(1, 10000);
         $themesList = array();
         foreach ($themes as $theme) {
             $themesList[$theme->getId()] = $theme->getTitle();
@@ -50,7 +53,7 @@ class Layout extends \Zend\Form\Form
         $element = new Element\Checkbox('published');
         $element->setLabel('Published:');
         $this->addElement($element);
-
+        
         if($this->locator->instanceManager()->hasAlias('sysmap-service')) {
             $navigator = $this->locator->get('sysmap-service')->getMapFormElement();
 
@@ -99,6 +102,14 @@ class Layout extends \Zend\Form\Form
         }
 
         return parent::populate($values);
+    }
+    
+    /**
+     * @param \ZlyTemplater\Model\Themes $model 
+     */
+    public function setModel($model)
+    {
+        $this->themesModel = $model;
     }
     
     public function setLocator($locator)

@@ -114,8 +114,9 @@ class AdminController extends ActionController
     public function editLayoutAction()
     {
         $layoutModel = $this->getLocator()->get('ZlyTemplater\Model\Layouts');
+        $themesModel = $this->getLocator()->get('ZlyTemplater\Model\Themes');
         $layout = $layoutModel->getLayout($this->getRequest()->getMetadata('id'), true);
-        $form = $this->getLocator()->get('ZlyTemplater\Form\Layout', array('options'=>array('locator'=>$this->getLocator())));
+        $form = $this->getLocator()->get('ZlyTemplater\Form\Layout', array('options'=>array('locator'=>$this->getLocator(), 'model'=>$themesModel)));
         $form->populate($layout->toArray());
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->post()->toArray())) {
