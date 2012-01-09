@@ -106,7 +106,7 @@ class Themes extends \Zly\Doctrine\Model
     public function saveTheme(Mapper\Theme $theme, array $values)
     {
         $theme->fromArray($values);
-        $layoutsModel = new Layouts();
+        $layoutsModel = new Layouts($this->em);
         $current = false;
         if ($theme->getCurrent() == true) {
             $current = true;

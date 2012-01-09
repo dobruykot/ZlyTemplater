@@ -28,7 +28,18 @@ return array(
         )
     ),
     'routes' => array(
- 
+        'templater-admin' => array(
+            'priority' => 99,
+            'type'    => 'Zly\Mvc\Router\Http\Route',
+            'options' => array(
+                'route'    => '/admin/templater/:action/*',
+                'defaults' => array(
+                    'controller' => 'templater-admin',
+                    'action'     => 'index'
+                ),
+               
+            )
+        ),
     ),
     'di' => array(
         'instance' => array(
@@ -71,13 +82,11 @@ return array(
             ),
             'ZlyTemplater\Form\Theme' => array(
                 'parameters' => array(
-                    'model' => 'ZlyTemplater\Model\Themes',
                     'view' => 'view'
                 )
             ),
             'ZlyTemplater\Form\Layout' => array(
                 'parameters' => array(
-                    'model' => 'ZlyTemplater\Model\Themes',
                     'view' => 'view'
                 )
             ),

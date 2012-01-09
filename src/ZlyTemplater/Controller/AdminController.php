@@ -50,7 +50,6 @@ class AdminController extends ActionController
     public function editThemeAction()
     {
         $themesModel = $this->getLocator()->get('ZlyTemplater\Model\Themes');
-        $config = $this->getEvent();
 
         $theme = $themesModel->getTheme($this->getRequest()->getMetadata('id'), true);
         
