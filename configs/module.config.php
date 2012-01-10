@@ -46,7 +46,17 @@ return array(
             'alias' => array(
                 'view'  => 'Zend\View\PhpRenderer',
                 'templater-tools'   => 'ZlyTemplater\Controller\ToolsController',
-                'templater-admin'   => 'ZlyTemplater\Controller\AdminController',
+                'templater-admin'   => 'ZlyTemplater\Controller\AdminController',                
+                'templater-cache' => 'Zend\Cache\Storage\Adapter\Filesystem'
+            ),
+            'templater-cache' => array(
+                'injections' => array(
+                    'setOptions' => array(
+                        'options' => array(
+                            'cache_dir'=> __DIR__ . '/../../../data/cache'
+                         )
+                    )
+                )
             ),
             'Zend\View\HelperBroker' => array(
                 'parameters' => array(
