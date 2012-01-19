@@ -270,9 +270,8 @@ class Listener implements ListenerAggregate
             $themeDirectory = $config->themes->directory .
                     DIRECTORY_SEPARATOR . $currentLayout->getTheme()->getName();
             $layoutPath = $themeDirectory . DIRECTORY_SEPARATOR . $config->layout->directory;
-
             $view->resolver()->addPath($layoutPath);
-            $this->themePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath($themeDirectory));
+            $this->themePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\','/',realpath($themeDirectory)));
             $layoutName = $currentLayout->getName(). '.phtml';
 
             $layoutFile = realpath($layoutPath . DIRECTORY_SEPARATOR . $layoutName );
