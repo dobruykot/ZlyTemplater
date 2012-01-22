@@ -256,10 +256,10 @@ class Listener implements ListenerAggregate
                 $currentLayout = $this->model->getCurrentLayout($mapIdentifiers);
             }
 
-
-            $this->_layout = $currentLayout;
-            $this->attachWidgets($event, $currentLayout->getWidgets());
-
+            if(!empty($currentLayout)) {
+                $this->_layout = $currentLayout;
+                $this->attachWidgets($event, $currentLayout->getWidgets());
+            }
             /* @var $view Zend\View\PhpRenderer */
             $view = $event->getTarget()->getLocator()->get('view');
             $layoutName = '';
