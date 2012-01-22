@@ -106,40 +106,24 @@ class Module
         return true;
     }
     
-    public function install()
+    public function install($values, \Zend\Di\Di $locator)
     {
-        $options = $this->getOptions();
-
-        if(!empty($options['installed'])) {
-            throw new \Exception('Module already installed');
-        }
-        $mapModel = new Model\Themes();
+        $mapModel = $locator->get('ZlyTemplater\Model\Themes');
         $mapModel->initSchema();
-        $modulesPlugin = $this->getBroker()->load('modules');
-        $modulesPlugin->installModule('templater');
         return true;
     }
     
-    public function update()
+    public function update($values, \Zend\Di\Di $locator)
     {
-        $themeModule = new Model\Themes();
+        $themeModule = $locator->get('ZlyTemplater\Model\Themes');
         $themeModule->updateSchema();
         return true;
     }
     
-    public function uninstall()
+    public function uninstall($values, \Zend\Di\Di $locator)
     {
-        $options = $this->getOptions();
-
-        if(empty($options['installed'])) {
-            throw new \Exception('Module not installed');
-        }
-        $mapModel = new Model\Themes();
+        $mapModel = $locator->get('ZlyTemplater\Model\Themes');
         $mapModel->dropSchema();
-        $modulesPlugin = $this->getBroker()->load('modules');
-        $modulesPlugin->installModule('templater', false);
-        $this->disable();
         return true;
     }
-
 }
