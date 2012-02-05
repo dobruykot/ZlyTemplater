@@ -34,8 +34,9 @@ class Layout extends EntityRepository
         $query = $qb->leftJoin('lay.theme', 'tpl')
                     ->leftJoin('lay.points','lp')
                     ->andWhere('lay.published = :published')
-                    ->andWhere('tpl.current = :current')
-                    ->setParameters(array('published'=>true, 'current'=>true))
+                    ->andWhere('tpl.active = :active')
+                    ->setParameters(array('published'=>true, 'active'=>true))
+                    ->orderBy('tpl.ordering','DESC')
                     ->orderBy('lp.map_id','DESC');
 
         $layoutParts = array();
@@ -46,16 +47,14 @@ class Layout extends EntityRepository
 
         $layoutPartsSql = $qb->expr()->in('lp.map_id', $layoutParts);
         $query->andWhere($layoutPartsSql);
-
+        
         $layouts = $query->getQuery()->execute();
-
+        
         $currentLayout = array(-1,0);
-
         foreach($layouts as $layout) {
             $points = $layout->getPoints();
             foreach($points as $point) {
                 $key = array_search($point->getMapId(), $layoutParts);
-
                 if($key !== false) {
                     if($currentLayout[0] < $key) {
                         $currentLayout[1] = $layout;

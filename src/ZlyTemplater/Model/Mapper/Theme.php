@@ -25,7 +25,9 @@ class Theme
     /** @\Doctrine\ORM\Mapping\Column(length=255) */
     protected $name;
     /** @\Doctrine\ORM\Mapping\Column(type="boolean") */
-    protected $current;    
+    protected $active;    
+    /** @\Doctrine\ORM\Mapping\Column(type="integer") */
+    protected $ordering;    
     /**
      * @\Doctrine\ORM\Mapping\OneToMany(targetEntity="ZlyTemplater\Model\Mapper\Layout", mappedBy="theme", cascade={"remove"})
      */
@@ -56,14 +58,14 @@ class Theme
         $this->name = $name;
     }
 
-    public function getCurrent()
+    public function getActive()
     {
-        return $this->current;
+        return $this->active;
     }
 
-    public function setCurrent($current)
+    public function setActive($active)
     {
-        $this->current = $current;
+        $this->active = $active;
     }
 
     public function getLayouts()
@@ -74,6 +76,16 @@ class Theme
     public function setLayouts($layouts)
     {
         $this->layouts = $layouts;
+    }
+    
+    public function getOrdering()
+    {
+        return $this->ordering;
+    }
+
+    public function setOrdering($ordering)
+    {
+        $this->ordering = $ordering;
     }
     
     public function toArray()

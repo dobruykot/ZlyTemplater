@@ -29,19 +29,17 @@ class Theme extends \Zend\Form\Form
         $element->addMultiOptions($this->model->getThemesDirectoriesFromFS());
         $this->addElement($element);
 
-        $element = new Element\Radio('current');
+        $element = new Element\Radio('active');
         $element->setSeparator('&nbsp;');
-        $element->setLabel('Current:');
+        $element->setLabel('Active:');
         $element->setValue(false);
         $element->setMultiOptions(array('1' => 'Yes', '0' => 'No'));
         $element->setRequired(true);
         $this->addElement($element);
-
-        $element = new Element\Radio('import_layouts');
-        $element->setSeparator('&nbsp;');
-        $element->setLabel('Import layouts:');
-        $element->setValue(false);
-        $element->setMultiOptions(array('1' => 'Yes', '0' => 'No'));
+        
+        $element = new Element\Text('ordering');
+        $element->setLabel('Ordering:');
+        $element->setRequired(true);
         $this->addElement($element);
 
         $element = new Element\Submit('submit');

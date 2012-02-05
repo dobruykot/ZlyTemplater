@@ -119,11 +119,15 @@ class Listener implements ListenerAggregate
             return;
         }
 
+        $layout = $this->getLayout($e);
         $routeMatch = $e->getRouteMatch();
         $controller = $routeMatch->getParam('controller', 'index');
         $action     = $routeMatch->getParam('action', 'index');
+        $customViewPath = $this->getThemeViewPath($layout);
         $script     = $controller . '/' . $action . '.phtml';
-
+        $resolver = $this->view->resolver();
+        if(is_dir($customViewPath))
+            $resolver->addPath(realpath($customViewPath));
         $vars       = $e->getResult();
 
         if (is_scalar($vars)) {
@@ -239,13 +243,11 @@ class Listener implements ListenerAggregate
         }
 
         $request = $event->getRouteMatch();
-        $themeSettings = $this->getConfig()->toArray();
         $locator = $event->getTarget()->getLocator();
         
         if($locator->instanceManager()->hasAlias('sysmap-service')) {
             $mapIdentifiers = $locator->get('sysmap-service')
                                     ->getCurentlyActiveItems($request);
-            $config = $this->getConfig();
 
             /**
              * Get current layout from config
@@ -255,7 +257,7 @@ class Listener implements ListenerAggregate
             } else {
                 $currentLayout = $this->model->getCurrentLayout($mapIdentifiers);
             }
-
+            
             if(!empty($currentLayout)) {
                 $this->_layout = $currentLayout;
                 $this->attachWidgets($event, $currentLayout->getWidgets());
@@ -267,9 +269,8 @@ class Listener implements ListenerAggregate
         } 
         
         if(!empty($currentLayout)) {
-            $themeDirectory = $config->themes->directory .
-                    DIRECTORY_SEPARATOR . $currentLayout->getTheme()->getName();
-            $layoutPath = $themeDirectory . DIRECTORY_SEPARATOR . $config->layout->directory;
+            $themeDirectory = $this->getThemePath($currentLayout);
+            $layoutPath = $this->getLayoutPath($currentLayout);
             $view->resolver()->addPath($layoutPath);
             $this->themePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\','/',realpath($themeDirectory)));
             $layoutName = $currentLayout->getName(). '.phtml';
@@ -288,7 +289,30 @@ class Listener implements ListenerAggregate
 
         return $currentLayout;
     }
+    
+    public function getThemePath(\ZlyTemplater\Model\Mapper\Layout $layout)
+    {
+        $config = $this->getConfig();
+        $themeDirectory = $config->themes->directory .
+                    DIRECTORY_SEPARATOR . $layout->getTheme()->getName();
+        return $themeDirectory;
+    }
 
+    public function getLayoutPath(\ZlyTemplater\Model\Mapper\Layout $layout)
+    {
+        $config = $this->getConfig();
+        $themeDirectory = $this->getThemePath($layout);
+        $layoutPath = $themeDirectory . DIRECTORY_SEPARATOR . $config->layout->directory;
+        return $layoutPath;
+    }
+    
+    public function getThemeViewPath(\ZlyTemplater\Model\Mapper\Layout $layout)
+    {
+        $config = $this->getConfig();
+        $themeDirectory = $this->getThemePath($layout);
+        $viewPath = $themeDirectory . DIRECTORY_SEPARATOR . $config->views->directory;
+        return $viewPath;
+    }
     /**
      * @param \Zend\Mvc\MvcEvent $event
      * @param $widgets
@@ -303,12 +327,15 @@ class Listener implements ListenerAggregate
                 $routeMatch = $service->getRequestByIdentifier($widget->getMapId());
                 if(!empty($routeMatch)) {
                     $widgetEvent = new \Zend\Mvc\MvcEvent();
+                    $request = new \Zend\Http\Request();
+                    $request->setMetadata($routeMatch->getParams());
                     $widgetEvent->setRouteMatch($routeMatch);
                     $widgetEvent->setResponse(new HttpResponse());
                     $controllerName = $routeMatch->getParam('controller');
                     /* @var $controller \Zend\Mvc\Controller\ActionController */
                     $controller = $locator->get($controllerName);
-                    $controller->execute($widgetEvent);
+                    $controller->setEvent($widgetEvent);
+                    $controller->dispatch($request);
                     $content = $this->renderView($widgetEvent);
                     $this->_layout->setVar($widget->getPlaceholder(), $content);
                 }

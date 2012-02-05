@@ -106,46 +106,8 @@ class Themes extends \Zly\Doctrine\Model
     public function saveTheme(Mapper\Theme $theme, array $values)
     {
         $theme->fromArray($values);
-        $layoutsModel = $this->locator->get('ZlyTemplater\Model\Layouts');
-        $current = false;
-        if ($theme->getCurrent() == true) {
-            $current = true;
-            $theme->setCurrent(false);
-        }
         $this->em->persist($theme);
         $result = $this->em->flush();
-
-        if (!empty($values['import_layouts'])) {
-            $layoutsModel->importFromTheme($theme, true);
-        }
-
-        if($current === true && $this->locator->instanceManager()->hasAlias('sysmap-service')) {
-            
-     
-            $rootNode = $this->locator->get('sysmap-service')->getRootIdentifier();
-            $front = false;
-            foreach($theme->getLayouts() as $layout) {
-                /* @var $layout \ZlyTemplater\Model\Mapper\Layout */
-                $points = $layout->getPoints();
-                if(!empty($points)) {
-                    foreach($points as $point) {
-                        if($point->getMapId() == $rootNode->getResourceId())
-                            $front = true;
-                    }
-                }
-            }
-            
-            if($front) {
-                $this->disableAllThemes();
-                $theme->setCurrent(true);
-                $this->em->persist($theme);
-                $result = $this->em->flush();
-            } else {
-                throw new \Exception('Theme can\'t be activated, because '.
-                        'published default layouts not found for this theme');
-            }
-        }
-
         return $result;
     }
 

@@ -13,7 +13,7 @@
             <td ><a href="<?php echo $this->url('default', array('controller'=>'templater-admin', 'action' => 'edit-theme', 'id' => $item->getId())); ?>"><?php echo $item->getTitle(); ?></a></td>
             <td align="center"><?php echo $item->getName(); ?></td>
             <td align="center"><a href="<?php echo $this->url('default',array('controller'=>'templater-admin', 'action' => 'current-theme', 'id' => $item->getId())); ?>" class="icon16 
-            <?php if ($item->getCurrent())
+            <?php if ($item->getActive())
             echo 'icon-published'; else
             echo 'icon-not-published' ?>"></a></td>
             <td align="center" nowrap="nowrap">
