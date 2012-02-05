@@ -101,11 +101,11 @@ class Layout extends EntityRepository
      * Return paginator for Layout mapper
      * @return \Zly\Paginator\Adapter\Doctrine 
      */
-    public function getPaginatorAdapter()
+    public function getPaginator()
     {
         $query = $this->createQueryBuilder('layout')->select('layout', 'theme')
                       ->leftJoin('layout.theme', 'theme')->getQuery();
-        return new \Zly\Paginator\Adapter\Doctrine($query);
+        return new \Doctrine\ORM\Tools\Pagination\Paginator($query);
     }
 
     /**

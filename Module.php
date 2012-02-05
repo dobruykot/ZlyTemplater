@@ -64,7 +64,10 @@ class Module
         $config = $e->getParam('config');
         $themeModel = $locator->get('ZlyTemplater\Model\Themes');
         $themeModel->setConfig($config->templater);
-        $themeModel->setLocator($locator);     
+        $themeModel->setLocator($locator);    
+        $layoutModel = $locator->get('ZlyTemplater\Model\Layouts');
+        $layoutModel->setConfig($config->templater);
+        $layoutModel->setLocator($locator);
     }
     
     protected function getViewListener( $config, $locator)

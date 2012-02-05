@@ -54,8 +54,8 @@ class Themes extends \Zly\Doctrine\Model
     public function getThemesPaginator($pageNumber = 1, $itemCountPerPage = 20)
     {
         $repo = $this->em->getRepository('ZlyTemplater\Model\Mapper\Theme');
-        $paginator = new \Zend\Paginator\Paginator($repo->getPaginatorAdapter());
-        $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
+        /** @var $paginator \Doctrine\ORM\Tools\Pagination\Paginator */
+        $paginator = $repo->getPaginator();
         return $paginator;
     }
 
@@ -106,7 +106,7 @@ class Themes extends \Zly\Doctrine\Model
     public function saveTheme(Mapper\Theme $theme, array $values)
     {
         $theme->fromArray($values);
-        $layoutsModel = new Layouts($this->em);
+        $layoutsModel = $this->locator->get('ZlyTemplater\Model\Layouts');
         $current = false;
         if ($theme->getCurrent() == true) {
             $current = true;
@@ -126,9 +126,12 @@ class Themes extends \Zly\Doctrine\Model
             $front = false;
             foreach($theme->getLayouts() as $layout) {
                 /* @var $layout \ZlyTemplater\Model\Mapper\Layout */
-                foreach($layout->getPoints() as $point) {
-                    if($point->getMapId() == $rootNode->getResourceId())
-                        $front = true;
+                $points = $layout->getPoints();
+                if(!empty($points)) {
+                    foreach($points as $point) {
+                        if($point->getMapId() == $rootNode->getResourceId())
+                            $front = true;
+                    }
                 }
             }
             
@@ -138,7 +141,7 @@ class Themes extends \Zly\Doctrine\Model
                 $this->em->persist($theme);
                 $result = $this->em->flush();
             } else {
-                throw new \Zend\Layout\Exception('Theme can\'t be activated, because '.
+                throw new \Exception('Theme can\'t be activated, because '.
                         'published default layouts not found for this theme');
             }
         }

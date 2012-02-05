@@ -77,8 +77,7 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function getLayoutsPaginator($pageNumber = 1, $itemCountPerPage = 20, array $where = array())
     {
-        $paginator = new \Zend\Paginator\Paginator($this->em->getRepository($this->repoName)->getPaginatorAdapter());
-        $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
+        $paginator = $this->em->getRepository($this->repoName)->getPaginator();
         return $paginator;
     }
 
@@ -91,23 +90,20 @@ class Layouts extends \Zly\Doctrine\Model
      */
     public function importFromTheme(Mapper\Theme $theme, $import = false)
     {
-        $options = \Zend\Controller\Front::getInstance()
-                ->getParam("bootstrap")
-                ->getOption('templater');
+        $options = $this->config;
         
         $path = realpath(
-            $options['public']['directory'] . DIRECTORY_SEPARATOR .
-            $options['theme']['directory'] . DIRECTORY_SEPARATOR .
+            $options->themes->directory . DIRECTORY_SEPARATOR .
             $theme->getName(). DIRECTORY_SEPARATOR .
-            $options['layout']['directory']);
+            $options->layout->directory);
         if(empty($path))
             return false;
 
         $layouts = $this->getLayoutsFiles($path);
         
-        $apiRequest = new \Zly\Api\Request($this,  'sysmap.get-root-identifier');
-        $rootNode = $apiRequest->proceed()->getResponse()->getFirst();
-            
+        $sysmapService = $this->locator->get('sysmap-service');
+        $rootNode = $sysmapService->getRootIdentifier();
+        
         if($import)
             foreach (array_keys($layouts) as $name) {
                 $exist = $this->em->getRepository($this->repoName)
@@ -212,5 +208,15 @@ class Layouts extends \Zly\Doctrine\Model
     public function getLayoutWithWidgetsbyNameAndRequest($layoutName, $mapIds = array()) 
     {
         return $this->em->getRepository($this->repoName)->getLayoutWithWidgetsbyNameAndRequest($layoutName, $mapIds);
+    }
+    
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+    
+    public function setLocator($locator)
+    {
+        $this->locator = $locator;
     }
 }

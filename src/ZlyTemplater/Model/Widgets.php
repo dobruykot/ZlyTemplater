@@ -104,8 +104,7 @@ class Widgets extends \Zly\Doctrine\Model
     public function getWidgetsPaginator($pageNumber = 1, $itemCountPerPage = 20)
     {
         $repo = $this->em->getRepository('ZlyTemplater\Model\Mapper\Widget');
-        $paginator = new \Zend\Paginator\Paginator($repo->getPaginatorAdapter());
-        $paginator->setCurrentPageNumber($pageNumber)->setItemCountPerPage($itemCountPerPage);
+        $paginator = $repo->getPaginator();
         return $paginator;
     }
     

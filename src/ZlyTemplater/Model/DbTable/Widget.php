@@ -41,14 +41,14 @@ class Widget extends EntityRepository
      * Return paginator for widget mapper
      * @return \Zly\Paginator\Adapter\Doctrine 
      */
-    public function getPaginatorAdapter()
+    public function getPaginator()
     {
         $query = $this->createQueryBuilder('wd')
                       ->select('wd','lay','theme')
                       ->leftJoin('wd.layout', 'lay')
                       ->leftJoin('lay.theme', 'theme')
                       ->getQuery();
-        return new \Zly\Paginator\Adapter\Doctrine($query);
+        return new \Doctrine\ORM\Tools\Pagination\Paginator($query);
     }
 }
 
