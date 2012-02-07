@@ -24,7 +24,7 @@ class LayoutPoint extends EntityRepository
     public function deleteUnusedPoints($layId, array $newPoints)
     {
         $qb = $this->createQueryBuilder('lp');
-        $pointsPart = $qb->expr()->in('lp.map_id', ':points');
+        $pointsPart = $qb->expr()->notIn('lp.map_id', ':points');
 
         $query = $qb ->andWhere('lp.layout_id = :layoutId')
                      ->andWhere($pointsPart)
@@ -33,8 +33,9 @@ class LayoutPoint extends EntityRepository
                      ->getQuery();
 
         $points = $query->execute();
-        foreach($points as $point)
+        foreach($points as $point) {
             $this->_em->remove($point);
+        }
         return $this->_em->flush();
     }
 }
