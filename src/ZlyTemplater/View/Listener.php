@@ -274,7 +274,6 @@ class Listener implements ListenerAggregate
             $view->resolver()->addPath($layoutPath);
             $this->themePath = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\','/',realpath($themeDirectory)));
             $layoutName = $currentLayout->getName(). '.phtml';
-
             $layoutFile = realpath($layoutPath . DIRECTORY_SEPARATOR . $layoutName );
         } else {
             $currentLayout = new \ZlyTemplater\Model\Mapper\Layout();
@@ -292,10 +291,15 @@ class Listener implements ListenerAggregate
     
     public function getThemePath(\ZlyTemplater\Model\Mapper\Layout $layout)
     {
+//        \Zend\Debug::dump($layout); die;
         $config = $this->getConfig();
-        $themeDirectory = $config->themes->directory .
+        if($layout->getTheme() !== null ) {
+            $themeDirectory = $config->themes->directory .
                     DIRECTORY_SEPARATOR . $layout->getTheme()->getName();
-        return $themeDirectory;
+            return $themeDirectory;
+        } else {
+            return false;
+        }
     }
 
     public function getLayoutPath(\ZlyTemplater\Model\Mapper\Layout $layout)
